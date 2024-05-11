@@ -1,11 +1,11 @@
 const readCSV = require('../../src/csvReader');
-const parseQuery = require('../../src/queryParser');
+const { parseQuery } = require('../../src/queryParser');
 const executeSELECTQuery = require('../../src/index');
 
 test('Read CSV File', async () => {
     const data = await readCSV('./student.csv');
     expect(data.length).toBeGreaterThan(0);
-    expect(data.length).toBe(3);
+    expect(data.length).toBe(4);
     expect(data[0].name).toBe('John');
     expect(data[0].age).toBe('30'); //ignore the string type here, we will fix this later
 });
@@ -17,8 +17,9 @@ test('Parse SQL Query', () => {
         fields: ['id', 'name'],
         table: 'student',
         whereClauses: [],
-        joinCondition: null,
-        joinTable: null
+        joinType: null,
+        joinTable: null,
+        joinCondition: null
     });
 });
 
@@ -43,8 +44,9 @@ test('Parse SQL Query with WHERE Clause', () => {
             "operator": "=",
             "value": "25",
         }],
-        joinCondition: null,
-        joinTable: null
+        joinType: null,
+        joinTable: null,
+        joinCondition: null
     });
 });
 
@@ -72,8 +74,9 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
             "operator": "=",
             "value": "John",
         }],
-        joinCondition: null,
-        joinTable: null
+        joinType: null,
+        joinTable: null,
+        joinCondition: null
     });
 });
 
@@ -87,14 +90,14 @@ test('Execute SQL Query with Complex WHERE Clause', async () => {
 test('Execute SQL Query with Greater Than', async () => {
     const queryWithGT = 'SELECT id FROM student WHERE age > 22';
     const result = await executeSELECTQuery(queryWithGT);
-    expect(result.length).toEqual(2);
+    expect(result.length).toEqual(3);
     expect(result[0]).toHaveProperty('id');
 });
 
 test('Execute SQL Query with Not Equal to', async () => {
     const queryWithGT = 'SELECT name FROM student WHERE age != 25';
     const result = await executeSELECTQuery(queryWithGT);
-    expect(result.length).toEqual(2);
+    expect(result.length).toEqual(3);
     expect(result[0]).toHaveProperty('name');
 });
 
@@ -105,6 +108,7 @@ test('Parse SQL Query with INNER JOIN', async () => {
         fields: ['student.name', 'enrollment.course'],
         table: 'student',
         whereClauses: [],
+        joinType: 'INNER',
         joinTable: 'enrollment',
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' }
     })
@@ -117,6 +121,7 @@ test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {
         fields: ['student.name', 'enrollment.course'],
         table: 'student',
         whereClauses: [{ field: 'student.age', operator: '>', value: '20' }],
+        joinType: 'INNER',
         joinTable: 'enrollment',
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' }
     })
