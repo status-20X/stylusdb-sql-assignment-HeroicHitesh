@@ -17,9 +17,11 @@ test('Parse SQL Query', () => {
         fields: ['id', 'name'],
         table: 'student',
         whereClauses: [],
-        joinCondition: null,
+        joinType: null,
         joinTable: null,
-        joinType: null
+        joinCondition: null,
+        groupByFields: null,
+        hasAggregateWithoutGroupBy: false,
     });
 });
 
@@ -44,9 +46,11 @@ test('Parse SQL Query with WHERE Clause', () => {
             "operator": "=",
             "value": "25",
         }],
-        joinCondition: null,
+        joinType: null,
         joinTable: null,
-        joinType: null
+        joinCondition: null,
+        groupByFields: null,
+        hasAggregateWithoutGroupBy: false,
     });
 });
 
@@ -74,9 +78,11 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
             "operator": "=",
             "value": "John",
         }],
-        joinCondition: null,
+        joinType: null,
         joinTable: null,
-        joinType: null
+        joinCondition: null,
+        groupByFields: null,
+        hasAggregateWithoutGroupBy: false,
     });
 });
 
@@ -108,9 +114,11 @@ test('Parse SQL Query with INNER JOIN', async () => {
         fields: ['student.name', 'enrollment.course'],
         table: 'student',
         whereClauses: [],
+        joinType: 'INNER',
         joinTable: 'enrollment',
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
-        joinType: 'INNER'
+        groupByFields: null,
+        hasAggregateWithoutGroupBy: false,
     })
 });
 
@@ -121,9 +129,11 @@ test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {
         fields: ['student.name', 'enrollment.course'],
         table: 'student',
         whereClauses: [{ field: 'student.age', operator: '>', value: '20' }],
+        joinType: 'INNER',
         joinTable: 'enrollment',
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
-        joinType: 'INNER'
+        groupByFields: null,
+        hasAggregateWithoutGroupBy: false,
     })
 });
 

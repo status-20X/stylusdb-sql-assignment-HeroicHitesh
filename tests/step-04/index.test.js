@@ -19,7 +19,9 @@ test('Parse SQL Query', () => {
         whereClauses: [],
         joinType: null,
         joinTable: null,
-        joinCondition: null
+        joinCondition: null,
+        groupByFields: null,
+        hasAggregateWithoutGroupBy: false,
     });
 });
 
