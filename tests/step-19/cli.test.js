@@ -21,6 +21,8 @@ test('DISTINCT with Multiple Columns via CLI', (done) => {
 
         if (match && match[1]) {
             // Parse the captured JSON string
+            console.log(match);
+            console.log(match[1]);
             const results = JSON.parse(match[1]);
 
             // Validation logic
